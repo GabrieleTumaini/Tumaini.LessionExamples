@@ -33,11 +33,14 @@
         //    }
         //}
 
+        public string Name { get; private set; }
+
+        public string Description { get; private set; }
         public int Health { get; private set; }
 
-        public bool isAlive { get; private set; }
+        public bool IsAlive => Health > 0;
 
-        public string Name
+        /*public string Name
         {
             get
             {
@@ -61,57 +64,58 @@
             {
                 _attackDamage = value;
             }
-        }
+        }*/
 
         // Constructor
         public Enemy() { }
         public Enemy(string name)
         {
-            SetName(name);
+            Name = name;
         }
 
-        public Enemy(string name, int health)
+        public Enemy(string name, int health = CharachterValidator.MaxHealth)
         {
-            SetName(name);
-            SetHealth(health);
-
+            Name = CharachterValidator.ValidateName(name);
+            Health = CharachterValidator.ValidateHealth(health);
+            Description = description ?? string.Empty 
         }
 
          //function
          public void SetName(string newname)
          {
             if (!string.IsNullOrWhiteSpace(newname))
-                _name = newname;
+                Name = newname;
          }
 
         public void SetHealth(int newhealth)
         {
-            if (int.IsPositive(newhealth) && newhealth <= 100)
+            if (int.IsPositive(newhealth) && newhealth <= CharachterValidator.MaxHealth)
             {
-                _health = newhealth;
+                Health = newhealth;
             }
-        }
-
-        public string getname()
-        { 
-            return _name; 
-        }
-        public int gethealth()
-        {
-            return _health;
+            else
+            {
+                throw new ArgumentException();
+            }
         }
 
         public void TakeDamage(int damage)
         {
-            if (int.IsPositive(damage))
-            {
-                Health -= damage;
-                if (Health <= 0)
-                {
-                    Health = 0;
-                    isAlive = false;
-                }
-            }
+            if (damage < 0)
+
+                throw new ArgumentException();
+
+            Health = Math.Max (Health - damage, CharachterValidator.MinHealth);
+
+        }
+
+        public void Heal(int healAmount)
+        {
+            if (healAmount < 0)
+
+                throw new ArgumentException();
+
+            Health = Math.Min(Health + healAmount, CharachterValidator.MaxHealth);
         }
 
     }

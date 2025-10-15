@@ -34,6 +34,7 @@ namespace BlaisePascal.LessonsExamples.Domain.UnitTest
 
 
         }
+
         [Fact]
         public void EnemyName_TheNameCannotBeEmpty()
         {
@@ -48,6 +49,7 @@ namespace BlaisePascal.LessonsExamples.Domain.UnitTest
 
 
         }
+
         [Fact]
         public void EnemyName_TheNameCannotBeWhiteSpace()
         {
@@ -75,6 +77,7 @@ namespace BlaisePascal.LessonsExamples.Domain.UnitTest
             //Assert
             Assert.Equal(50, newEnemy.Health);
         }
+
         [Fact]
         public void SetHealth_TheHealthCannotBeNegative()
         {
@@ -85,6 +88,7 @@ namespace BlaisePascal.LessonsExamples.Domain.UnitTest
             //Assert
             // IMPORTANTE: Come si fa a testare il lancio di un errore?
         }
+
         [Fact]
         public void SetHealth_TheHealthCannotBeGreaterThan100()
         {
@@ -95,6 +99,7 @@ namespace BlaisePascal.LessonsExamples.Domain.UnitTest
             //Assert
             // IMPORTANTE: Come si fa a testare il lancio di un errore?
         }
+
         [Fact]
         public void SetHealth_WhenHealthIsSetToPositiveValue_IsAliveMustBeTrue()
         {
@@ -144,6 +149,29 @@ namespace BlaisePascal.LessonsExamples.Domain.UnitTest
             //Assert
             Assert.Equal(0, newEnemy.Health);
             Assert.False(newEnemy.IsAlive);
+        }
+
+        [Fact]
+        public void Heal_WhenHealIsValid_HealthMustIncrease()
+        {
+            //Arrange
+            Enemy newEnemy = new Enemy();
+            newEnemy.SetHealth(50);
+            //Act
+            newEnemy.Heal(30);
+            //Assert
+            Assert.Equal(80, newEnemy.Health);
+        }
+
+        [Fact]
+        public void Heal_WhenHealIsNegative_ThrowsArgumentOutOfRangeException()
+        {
+            //Arrange
+            Enemy newEnemy = new Enemy();
+            newEnemy.SetHealth(50);
+            //Act
+            //Assert
+            // IMPORTANTE: Come si fa a testare il lancio di un errore?
         }
     }
 }
