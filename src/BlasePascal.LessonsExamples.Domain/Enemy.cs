@@ -77,7 +77,7 @@
         {
             Name = CharachterValidator.ValidateName(name);
             Health = CharachterValidator.ValidateHealth(health);
-            Description = description ?? string.Empty 
+            Description = Description ?? string.Empty;
         }
 
          //function
@@ -111,7 +111,7 @@
 
         public void Heal(int healAmount)
         {
-            if (healAmount < 0)
+            if (healAmount < 0 && IsAlive == true)
 
                 throw new ArgumentException();
 

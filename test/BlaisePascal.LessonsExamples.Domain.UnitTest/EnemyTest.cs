@@ -1,3 +1,5 @@
+using static System.Net.Mime.MediaTypeNames;
+
 namespace BlaisePascal.LessonsExamples.Domain.UnitTest
 {
     public class EnemyTest
@@ -11,13 +13,13 @@ namespace BlaisePascal.LessonsExamples.Domain.UnitTest
         public void EnemyName_WhenTheNameIsValid_NameMustBeAssignedCorrectly()
         {
             //Arrange
-            Enemy newEnemy = new Enemy();
+            Enemy enemy = new Enemy();
 
             //Act
-            newEnemy.SetName("Stefano");
+            enemy.SetName("Stefano");
 
             //Assert
-            Assert.Equal("Stefano", newEnemy.Name);
+            Assert.Equal("Stefano", enemy.Name);
 
 
         }
@@ -26,11 +28,11 @@ namespace BlaisePascal.LessonsExamples.Domain.UnitTest
         public void EnemyName_TheNameCannotBeNull()
         {
             //Arrange
-            Enemy newEnemy = new Enemy();
+            Enemy enemy = new Enemy();
 
 
             //Assert
-            Assert.Null(newEnemy.Name);
+            Assert.Null(enemy.Name);
 
 
         }
@@ -39,13 +41,13 @@ namespace BlaisePascal.LessonsExamples.Domain.UnitTest
         public void EnemyName_TheNameCannotBeEmpty()
         {
             //Arrange
-            Enemy newEnemy = new Enemy();
+            Enemy enemy = new Enemy();
 
             //Act
-            newEnemy.SetName("");
+            enemy.SetName("");
 
             //Assert
-            Assert.Null(newEnemy.Name);
+            Assert.Null(enemy.Name);
 
 
         }
@@ -54,124 +56,161 @@ namespace BlaisePascal.LessonsExamples.Domain.UnitTest
         public void EnemyName_TheNameCannotBeWhiteSpace()
         {
             //Arrange
-            Enemy newEnemy = new Enemy();
+            Enemy enemy = new Enemy();
             //Act
-            newEnemy.SetName("   ");
+            enemy.SetName("   ");
             //Assert
-            Assert.Null(newEnemy.Name);
+            Assert.Null(enemy.Name);
         }
-
-
-
-
-
-
 
         [Fact]
         public void SetHealth_WhenTheHealthIsValid_HealthMustBeAssignedCorrectly()
         {
             //Arrange
-            Enemy newEnemy = new Enemy();
+            Enemy enemy = new Enemy();
             //Act
-            newEnemy.SetHealth(50);
+            enemy.SetHealth(50);
             //Assert
-            Assert.Equal(50, newEnemy.Health);
+            Assert.Equal(50, enemy.Health);
         }
 
         [Fact]
         public void SetHealth_TheHealthCannotBeNegative()
         {
             //Arrange
-            Enemy newEnemy = new Enemy();
-            //Act
-            newEnemy.SetHealth(-10);
-            //Assert
-            // IMPORTANTE: Come si fa a testare il lancio di un errore?
+            Enemy enemy = new Enemy();
+
+            //Act & Assert
+            Assert.Throws<ArgumentException>(() => enemy.SetHealth(-10));
         }
 
         [Fact]
         public void SetHealth_TheHealthCannotBeGreaterThan100()
         {
             //Arrange
-            Enemy newEnemy = new Enemy();
-            //Act
-            newEnemy.SetHealth(150);
-            //Assert
-            // IMPORTANTE: Come si fa a testare il lancio di un errore?
+            Enemy enemy = new Enemy();
+
+            //Act & Assert
+            Assert.Throws<ArgumentException>(() => enemy.SetHealth(150));
         }
 
         [Fact]
         public void SetHealth_WhenHealthIsSetToPositiveValue_IsAliveMustBeTrue()
         {
             //Arrange
-            Enemy newEnemy = new Enemy();
+            Enemy enemy = new Enemy();
             //Act
-            newEnemy.SetHealth(50);
+            enemy.SetHealth(50);
             //Assert
-            Assert.True(newEnemy.IsAlive);
-        }
-
-
-
-
-
-
-
-        [Fact]
-        public void TakeDamage_WhenDamageIsValid_HealthMustDecrease()
-        {
-            //Arrange
-            Enemy newEnemy = new Enemy();
-            newEnemy.SetHealth(100);
-            //Act
-            newEnemy.TakeDamage(30);
-            //Assert
-            Assert.Equal(70, newEnemy.Health);
-        }
-        [Fact]
-        public void TakeDamage_WhenDamageIsNegative_ThrowsArgumentOutOfRangeException()
-        {
-            //Arrange
-            Enemy newEnemy = new Enemy();
-            //Act
-            newEnemy.SetHealth(100);
-            //Assert
-            // IMPORTANTE: Come si fa a testare il lancio di un errore?
-        }
-        [Fact]
-        public void TakeDamage_WhenDamageIsGreaterThanCurrentHealth_HealthMustBeZeroAndIsAliveMustBeFalse()
-        {
-            //Arrange
-            Enemy newEnemy = new Enemy();
-            newEnemy.SetHealth(50);
-            //Act
-            newEnemy.TakeDamage(70);
-            //Assert
-            Assert.Equal(0, newEnemy.Health);
-            Assert.False(newEnemy.IsAlive);
+            Assert.True(enemy.IsAlive);
         }
 
         [Fact]
-        public void Heal_WhenHealIsValid_HealthMustIncrease()
+        public void TakeDamage_WhenDamageIsValid30_HealthMustDecreaseBy30()
         {
             //Arrange
-            Enemy newEnemy = new Enemy();
-            newEnemy.SetHealth(50);
+            Enemy enemy = new Enemy("Goblin", 100);
+            int damage = 30;
             //Act
-            newEnemy.Heal(30);
+            enemy.TakeDamage(damage);
             //Assert
-            Assert.Equal(80, newEnemy.Health);
+            Assert.Equal(70, enemy.Health);
+        }
+        [Fact]
+        public void TakeDamage_WhenDamageIsNegative5_ShouldThrowArgumentExeption()
+        {
+            //Arrange
+            Enemy enemy = new Enemy("Goblin");
+            int damage = -5;
+
+            //Act & Assert
+            Assert.Throws<ArgumentException>(() => enemy.TakeDamage(damage));
+
+        }
+        [Fact]
+        public void TakeDamage_WhenDamage100IsGreaterThanCurrentHealth50_HealthMustBeZeroAndIsAliveMustBeFalse()
+        {
+            //Arrange
+            Enemy enemy = new Enemy("Goblin", 50);
+            int damage = 100;
+
+            //Act
+            enemy.TakeDamage(damage);
+
+            //Assert
+            Assert.Equal(0, enemy.Health);
+            Assert.False(enemy.IsAlive);
         }
 
         [Fact]
-        public void Heal_WhenHealIsNegative_ThrowsArgumentOutOfRangeException()
+        public void Heal_WhenHealIsValid30_HealthMustIncreaseBy30()
         {
             //Arrange
-            Enemy newEnemy = new Enemy();
-            newEnemy.SetHealth(50);
+            Enemy enemy = new Enemy("Goblin", 50);
+
             //Act
+            enemy.Heal(30);
+
             //Assert
-            // IMPORTANTE: Come si fa a testare il lancio di un errore?
+            Assert.Equal(80, enemy.Health);
+        }
+
+        [Fact]
+        public void Heal_WhenHealIsNegative5_ShouldThrowArgumentExeption()
+        {
+            //Arrange
+            Enemy enemy = new Enemy("Goblin", 50);
+            int healAmount = -5;
+
+            //Act & Assert
+            Assert.Throws<ArgumentException>(() => enemy.Heal(healAmount));
+
+        }
+
+        [Fact]
+        public void Heal_WhenHeal50IsGreaterThanMaxHealth100_HealthMustBe100()
+        {
+            //Arrange
+            Enemy enemy = new Enemy("Goblin", 80);
+            int healAmount = 50;
+            //Act
+            enemy.Heal(healAmount);
+            //Assert
+            Assert.Equal(100, enemy.Health);
+        }
+
+        [Fact]
+        public void Heal_WhenEnemyIsDead_HealthShouldRemain0AndIsAliveShouldRemainFalse()
+        {
+            //Arrange
+            Enemy enemy = new Enemy("Goblin", 0);
+            int healAmount = 20;
+
+            //Act & Assert
+            Assert.Equal(0, enemy.Health);
+            Assert.Equal(false, enemy.IsAlive);
+        }
+
+        [Fact]
+        public void IsAlive_WhenHealthIsGreaterThanZero1_ShouldReturnTrue()
+        {
+            //Arrange
+            Enemy enemy = new Enemy("Goblin", 1);
+            //Act
+            bool isAlive = enemy.IsAlive;
+            //Assert
+            Assert.True(isAlive);
+        }
+
+        [Fact]
+        public void IsAlive_WhenHealthIsZero_ShouldReturnFalse()
+        {
+            //Arrange
+            Enemy enemy = new Enemy("Goblin", 0);
+            //Act
+            bool isAlive = enemy.IsAlive;
+            //Assert
+            Assert.False(isAlive);
         }
     }
 }

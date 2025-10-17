@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace BlaisePascal.LessonsExamples.Domain
 {
     internal static class CharachterValidator
-
     {
         //Health Constants
 
@@ -24,5 +24,15 @@ namespace BlaisePascal.LessonsExamples.Domain
         }
 
         //TODO: Add ValidateHealth method
+
+
+        public static int ValidateHealth(int health)
+        {
+            {
+                if (health < MinHealth || health > MaxHealth)
+                    throw new ArgumentException($"Health must be between {MinHealth} and {MaxHealth}.");
+                return health;
+            }
+        }
     }
 }
